@@ -3,25 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QRカメラ起動テスト（背面カメラ固定）</title>
+<title>QRカメラ読み取りテスト（背面カメラ固定）</title>
 <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
 <body>
-<h2>QRコード読み取りテスト（背面カメラ固定）</h2>
-<div id="reader" style="width:300px;height:300px;"></div>
+<h2>QRコード読み取りテスト（背面カメラ固定・大きめ枠）</h2>
+<div id="reader" style="width:100%; max-width:400px; height:400px; margin:auto;"></div>
 <p id="result">読み取り結果がここに表示されます</p>
 
 <script>
 const html5QrCode = new Html5Qrcode("reader");
 
-// 背面カメラを強制指定
-const config = { fps: 10, qrbox: 250, facingMode: "environment" };
+// 背面カメラを強制指定、枠を大きめに設定
+const config = { 
+    fps: 10, 
+    qrbox: 350,       // 読み取り枠を大きく
+    aspectRatio: 1.0, // 正方形に固定
+    disableFlip: false // カメラの左右反転自動補正
+};
 
 html5QrCode.start(
     { facingMode: "environment" }, // 背面カメラを指定
     config,
     qrCodeMessage => {
         document.getElementById('result').innerText = "読み取り結果: " + qrCodeMessage;
+        // 読み取り成功したら停止してもよい場合
+        // html5QrCode.stop();
     },
     errorMessage => {
         // 読み取り失敗時は無視
