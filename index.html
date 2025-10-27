@@ -2,10 +2,11 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>薬袋QR照合</title>
+  <title>薬袋QR照合システム</title>
   <style>
     body { font-family: sans-serif; padding: 20px; }
     #status { margin-top: 20px; font-size: 1.2em; }
+    #reader { width: 300px; height: 300px; margin-top: 20px; }
     button { font-size: 1em; padding: 10px 20px; }
   </style>
 </head>
@@ -13,12 +14,15 @@
   <h1>薬袋QR照合システム</h1>
   <button id="scan">QRコードを読み取る</button>
   <div id="status">薬袋QRを読み取ってください</div>
+  <div id="reader"></div>
 
+  <!-- HTML5 QR Codeライブラリ -->
   <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+
   <script>
     let session = { drugQR: null, userQR: null };
 
-    // QRに対応する名前リスト
+    // QRコードIDに対応する名前
     const nameMap = {
       "drug1": "福岡太郎",
       "user1": "福岡太郎",
@@ -43,7 +47,6 @@
             cameraId,
             { fps: 10, qrbox: 250 },
             qrCodeMessage => {
-              // QRコード読み取り
               const id = qrCodeMessage.trim();
               const name = nameMap[id];
 
@@ -86,9 +89,11 @@
           ).catch(err => {
             alert("カメラ起動に失敗しました: " + err);
           });
+        } else {
+          alert("カメラが見つかりません");
         }
       }).catch(err => {
-        alert("カメラが見つかりません: " + err);
+        alert("カメラが取得できません: " + err);
       });
     });
   </script>
